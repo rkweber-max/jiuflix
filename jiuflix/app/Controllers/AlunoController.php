@@ -19,4 +19,10 @@ class AlunoController extends Controller
 
         return new JsonResponse($aluno, JsonResponse::HTTP_CREATED);
     }
+
+    public function getAll () {
+        $aluno = Aluno::all();
+
+        return new JsonResponse($aluno, JsonResponse::HTTP_OK);
+    }
 }

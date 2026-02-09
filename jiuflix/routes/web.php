@@ -18,3 +18,4 @@ Route::get('/', function () {
 });
 
 Route::post('/aluno/create', [AlunoController::class, 'create']);
+Route::get('/alunos', [AlunoController::class, 'getAll']);
