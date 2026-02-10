@@ -4,6 +4,7 @@ header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
+$uriParts = explode('/', trim($uri, '/'));
 
 if ($method === 'POST' && $uri === '/aluno/create') {
     $body = json_decode(file_get_contents('php://input'), true);
@@ -38,7 +39,25 @@ if ($method === "GET" && $uri === '/alunos') {
     $array = $stmt->fetchALL(PDO::FETCH_OBJ);
 
     http_response_code(200);
-    echo json_encode(['Alunos' => $array, 'message' => 'Alunos retornados com sucesso']);
+    echo json_encode(['Alunos' => $array, 'message' => 'Alunos retornados com sucesso!']);
+    exit;
+}
+
+if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
+    $id = (int) $uriParts[1];
+
+    $pdo =  connectionDatabase();
+
+    $sql = "SELECT * FROM aluno WHERE id = ?";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    http_response_code(200);
+    echo json_encode(['Aluno' => $result, 'message' => 'Aluno encontrado com sucesso!']);
     exit;
 }
 
