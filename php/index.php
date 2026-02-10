@@ -61,6 +61,25 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
     exit;
 }
 
+if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
+    $id = (int) $uriParts[1];
+
+    $pdo = connectionDatabase();
+
+    $sql = "DELETE FROM aluno WHERE id = ?";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    debug($result);
+
+    http_response_code(200);
+    echo json_encode(['Aluno' => $result, 'message' => 'Aluno deletado com sucesso!']);
+    exit();
+}
+
 function debug($param) {
     print_r('<pre>');
     var_dump($param);
