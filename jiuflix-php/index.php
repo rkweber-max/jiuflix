@@ -1,5 +1,7 @@
 <?php
 
+require_once 'repository.php';
+
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -18,49 +20,24 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
     }
 
     validateTypegraduation($body['type_graduation']);
-
-    $pdo = connectionDatabase();
-
-    $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation WHERE id = :id";
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':name', $body['name'], PDO::PARAM_STR);
-    $stmt->bindValue(':type_graduation', $body['type_graduation'], PDO::PARAM_STR);
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
+    
+    updated($body['name'], $body['type_graduation'], $id);
 
     http_response_code(200);
     echo json_encode(['message' => 'Aluno atualizado com sucesso']);
     exit;
 }
 
-function validateTypegraduation ($typeGraduation) {
-    $strips = ["BRANCA", "PRETA", "AZUL"];
-
-    if (!in_array($typeGraduation, $strips)) {
-        http_response_code(404);
-        echo json_encode(['message' => 'Type graduation not found']);
-        die();
-    }
-}
-
 if ($method === 'POST' && $uri === '/aluno/create') {
     $body = json_decode(file_get_contents('php://input'), true);
 
-    if (empty($body['name']) || empty($length)) {
+    if (empty($body['name']) || empty($body['type_graduation'])) {
         http_response_code(400);
         echo json_encode(['error' => 'Missing required fields']);
         exit;
     }
 
-    $pdo = connectionDatabase();
-
-    $sql = "INSERT INTO aluno (name, type_graduation) VALUES (:name, :type_graduation)";
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':name', $body['name']);
-    $stmt->bindValue(':type_graduation', $body['type_graduation']);
-    $stmt->execute();
+    created($body['name'], $body['type_graduation']);
 
     http_response_code(201);
     echo json_encode(['message' => 'Aluno criado com sucesso']);
@@ -134,6 +111,16 @@ function connectionDatabase () {
         http_response_code(500);
         echo json_encode(['error' => 'Internal server error']);
         exit;
+    }
+}
+
+function validateTypegraduation ($typeGraduation) {
+    $strips = ["BRANCA", "PRETA", "AZUL"];
+
+    if (!in_array($typeGraduation, $strips)) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Type graduation not found']);
+        die();
     }
 }
 
