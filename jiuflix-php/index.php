@@ -17,10 +17,11 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
         exit;
     }
 
+    validateTypegraduation($body['type_graduation']);
+
     $pdo = connectionDatabase();
 
     $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation WHERE id = :id";
-
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':name', $body['name'], PDO::PARAM_STR);
@@ -33,10 +34,22 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
     exit;
 }
 
+function validateTypegraduation ($typeGraduation) {
+    $strips = ["BRANCA", "PRETA", "AZUL"];
+
+    for ($i = 0; $i < count($strips); $i++) {
+        if (!in_array($typeGraduation, $strips)) {
+            http_response_code(404);
+            echo json_encode(['message' => 'Type graduation not found']);
+            die();
+        }
+    }
+}
+
 if ($method === 'POST' && $uri === '/aluno/create') {
     $body = json_decode(file_get_contents('php://input'), true);
 
-    if (empty($body['name']) || empty($body['type_graduation'])) {
+    if (empty($body['name']) || empty($length)) {
         http_response_code(400);
         echo json_encode(['error' => 'Missing required fields']);
         exit;
@@ -86,7 +99,7 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
     http_response_code(200);
     echo json_encode(['Aluno' => $result, 'message' => 'Aluno encontrado com sucesso!']);
     exit;
-}
+}   
 
 if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
     $id = (int) $uriParts[1];
@@ -100,18 +113,20 @@ if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && i
     $stmt->execute();
 
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-    debug($result);
 
     http_response_code(200);
     echo json_encode(['Aluno' => $result, 'message' => 'Aluno deletado com sucesso!']);
     exit();
 }
 
-function debug($param) {
+function debug($param, $bool = true) {
     print_r('<pre>');
     var_dump($param);
     print_r('</pre>');
-    die();
+
+    if ($bool) {
+        die();
+    }
 } 
 
 function connectionDatabase () {

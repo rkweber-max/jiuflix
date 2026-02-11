@@ -25,4 +25,27 @@ class AlunoController extends Controller
 
         return new JsonResponse($aluno, JsonResponse::HTTP_OK);
     }
+
+    public function show($id) {
+        $aluno = Aluno::getById($id);
+
+        return new JsonResponse($aluno, JsonResponse::HTTP_OK);
+    }
+
+    public function deleted($id) {
+        $aluno = Aluno::destroy($id);
+
+        return new JsonResponse($aluno, JsonResponse::HTTP_ACCEPTED);
+    }
+
+    public function updated (Request $request, $id) {
+        $aluno = Aluno::find($id);
+
+        $aluno->name = $request->input('name');
+        $aluno->type_graduation = $request->input('type_graduation');
+
+        $aluno->save();
+
+        return new JsonResponse($aluno, JsonResponse::HTTP_ACCEPTED);
+    }
 }

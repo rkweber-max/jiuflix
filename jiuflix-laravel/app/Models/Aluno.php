@@ -13,4 +13,8 @@ class Aluno extends Model
     protected $fillable = ['name', 'type_graduation'];
 
     public $timestamps = false;
+
+    public static function getById($id) {
+        return self::find($id);
+    }
 }
