@@ -13,11 +13,7 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 
     $body = json_decode(file_get_contents('php://input'), true);
 
-    if (empty($body['name']) || empty($body['type_graduation'])) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Missing required fields']);
-        exit;
-    }
+    validateRequiredFields($body['name'], $body['type_graduation']);
 
     validateTypegraduation($body['type_graduation']);
 
@@ -31,11 +27,7 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 if ($method === 'POST' && $uri === '/aluno/create') {
     $body = json_decode(file_get_contents('php://input'), true);
 
-    if (empty($body['name']) || empty($body['type_graduation'])) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Missing required fields']);
-        exit;
-    }
+    validateRequiredFields($body['name'], $body['type_graduation']);
 
     created($body['name'], $body['type_graduation']);
 
