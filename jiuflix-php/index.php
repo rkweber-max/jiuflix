@@ -17,10 +17,14 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 
     validateTypegraduation($body['type_graduation']);
 
-    updated($body['name'], $body['type_graduation'], $id);
+    $result = AlunosRepository::updated($body['name'], $body['type_graduation'], $id);
 
     http_response_code(200);
-    echo json_encode(['message' => 'Aluno atualizado com sucesso']);
+    echo json_encode([
+        'id' => $result->id,
+        'name' => $result->name,
+        'type_graduation' => $result->type_graduation
+    ]);
     exit;
 }
 
@@ -29,34 +33,44 @@ if ($method === 'POST' && $uri === '/aluno/create') {
 
     validateRequiredFields($body['name'], $body['type_graduation']);
 
-    created($body['name'], $body['type_graduation']);
+    $result = AlunosRepository::created($body['name'], $body['type_graduation']);
 
     http_response_code(201);
-    echo json_encode(['message' => 'Aluno criado com sucesso']);
+    echo json_encode([
+        'id' => $result[0]['id'],
+        'name' => $result[0]['name'],
+        'type_graduation' => $result[0]['type_graduation']
+    ]);
     exit;
 }
 
 if ($method === "GET" && $uri === '/alunos') {
-    getAll();
+    AlunosRepository::getAll();
 }
 
 if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
     $id = (int) $uriParts[1];
 
-    getById($id);
+    $result = AlunosRepository::getById($id);
 
     http_response_code(200);
-    echo json_encode(['message' => 'Aluno encontrado com sucesso!']);
+    echo json_encode([
+        'id' => $result[0]['id'],
+        'message' => 'Aluno encontrado com sucesso!'
+    ]);
     exit;
-}   
+}
 
 if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
     $id = (int) $uriParts[1];
 
-    deleted($id);
+    AlunosRepository::deleted($id);
 
     http_response_code(200);
-    echo json_encode(['message' => 'Aluno deletado com sucesso!']);
+    echo json_encode([
+        'id' => $id,
+        'message' => 'Aluno deletado com sucesso!'
+    ]);
     exit();
 }
 

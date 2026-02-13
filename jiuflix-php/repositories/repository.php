@@ -2,58 +2,87 @@
 
 $body = json_decode(file_get_contents('php://input'), true);
 
-function created ($name, $typeGraduation) {
-    $pdo = connectionDatabase();
-    $sql = "INSERT INTO aluno (name, type_graduation) VALUES (:name, :type_graduation)";
+class AlunosRepository
+{
+    public static function created($name, $typeGraduation)
+    {
+        $pdo = connectionDatabase();
+        $sql = "INSERT INTO aluno (name, type_graduation) VALUES (:name, :type_graduation)";
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':name', $name);
-    $stmt->bindValue(':type_graduation', $typeGraduation);
-    $stmt->execute();
-}
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':type_graduation', $typeGraduation);
+        $stmt->execute();
 
-function updated ($name, $typeGraduation, $id) {
-    $pdo = connectionDatabase();
+        $id = $pdo->lastInsertId();
 
-    $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation WHERE id = :id ORDER BY";
+        $sqlId = "SELECT * FROM aluno WHERE id = :id";
+        $stmt = $pdo->prepare($sqlId);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-    $stmt->bindValue(':type_graduation', $typeGraduation, PDO::PARAM_STR);
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-}
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 
-function getAll () {
-    $pdo = connectionDatabase();
-    $sql = "SELECT * FROM aluno";
+    public static function getAll()
+    {
+        $pdo = connectionDatabase();
+        $sql = "SELECT * FROM aluno";
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
 
-    $array = $stmt->fetchALL(PDO::FETCH_OBJ);
+        $array = $stmt->fetchALL(PDO::FETCH_ASSOC);
 
-    http_response_code(200);
-    echo json_encode(['Alunos' => $array, 'message' => 'Alunos retornados com sucesso!']);
-    exit;
-}
+        http_response_code(200);
+        echo json_encode(['Alunos' => $array, 'message' => 'Alunos retornados com sucesso!']);
+        exit;
+    }
 
-function getById($id) {
-    $pdo =  connectionDatabase();
+    public static function updated($name, $typeGraduation, $id)
+    {
+        $pdo = connectionDatabase();
 
-    $sql = "SELECT * FROM aluno WHERE id = ?";
+        $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation WHERE id = :id";
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(1, $id, PDO::PARAM_INT);
-    $stmt->execute();
-}
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        $stmt->bindValue(':type_graduation', $typeGraduation, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-function deleted($id) {
-    $pdo = connectionDatabase();
+        $sqlId = "SELECT * FROM aluno WHERE id = :id";
+        $stmt = $pdo->prepare($sqlId);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
 
-    $sql = "DELETE FROM aluno WHERE id = ?";
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(1, $id, PDO::PARAM_INT);
-    $stmt->execute();
+        return $result;
+    }
+
+    public static function getById($id)
+    {
+        $pdo =  connectionDatabase();
+    
+        $sql = "SELECT * FROM aluno WHERE id = ?";
+    
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(1, $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public static function deleted($id)
+    {
+        $pdo = connectionDatabase();
+    
+        $sql = "DELETE FROM aluno WHERE id = ?";
+    
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(1, $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }
