@@ -18,6 +18,14 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
     validateTypegraduation($body['type_graduation']);
 
     $result = AlunosRepository::updated($body['name'], $body['type_graduation'], $id);
+    if ($result == null) {
+        http_response_code(404);
+        echo json_encode([
+            'id' => $id,
+            'message' => 'Aluno não encontrado!'
+        ]);
+        exit;
+    }
 
     http_response_code(200);
     echo json_encode([
@@ -32,8 +40,18 @@ if ($method === 'POST' && $uri === '/aluno/create') {
     $body = json_decode(file_get_contents('php://input'), true);
 
     validateRequiredFields($body['name'], $body['type_graduation']);
+    validateTypegraduation($body['type_graduation']);
 
     $result = AlunosRepository::created($body['name'], $body['type_graduation']);
+
+    if ($result == null) {
+        http_response_code(404);
+        echo json_encode([
+            'id' => $id,
+            'message' => 'Aluno não encontrado!'
+        ]);
+        exit;
+    }
 
     http_response_code(201);
     echo json_encode([
@@ -53,6 +71,15 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
 
     $result = AlunosRepository::getById($id);
 
+    if ($result == null) {
+        http_response_code(404);
+        echo json_encode([
+            'id' => $id,
+            'message' => 'Aluno não encontrado!'
+        ]);
+        exit;
+    }
+
     http_response_code(200);
     echo json_encode([
         'id' => $result[0]['id'],
@@ -64,7 +91,16 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
 if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
     $id = (int) $uriParts[1];
 
-    AlunosRepository::deleted($id);
+    $result = AlunosRepository::deleted($id);
+
+    if ($result == null) {
+        http_response_code(404);
+        echo json_encode([
+            'id' => $id,
+            'message' => 'Aluno não encontrado'
+        ]);
+        exit();
+    }
 
     http_response_code(200);
     echo json_encode([
