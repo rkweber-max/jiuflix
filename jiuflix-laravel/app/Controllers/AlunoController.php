@@ -3,9 +3,12 @@
 namespace App\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateAlunoRequest;
 use App\Models\Aluno;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
+use function PHPUnit\Framework\isEmpty;
 
 class AlunoController extends Controller
 {
@@ -20,32 +23,48 @@ class AlunoController extends Controller
         return new JsonResponse($aluno, JsonResponse::HTTP_CREATED);
     }
 
-    public function getAll () {
-        $aluno = Aluno::all();
+    public function getAll()
+    {
+        $alunos = Aluno::all()->toArray();
 
-        return new JsonResponse($aluno, JsonResponse::HTTP_OK);
+        return new JsonResponse(['Alunos' => $alunos, 'message' => 'Alunos retornados com sucesso!'], JsonResponse::HTTP_OK);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $aluno = Aluno::getById($id);
 
-        return new JsonResponse($aluno, JsonResponse::HTTP_OK);
+        if ($aluno == null) {
+            return new JsonResponse(['id' => $id, 'message' => 'Aluno não encontrado!'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        return new JsonResponse(['id' => $aluno->id, 'message' => 'Aluno encontrado com sucesso!'], JsonResponse::HTTP_OK);
     }
 
-    public function deleted($id) {
+    public function deleted($id)
+    {
         $aluno = Aluno::destroy($id);
 
-        return new JsonResponse($aluno, JsonResponse::HTTP_ACCEPTED);
+        if ($aluno == null) {
+            return new JsonResponse(['id' => $id, 'message' => 'Aluno não encontrado!'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        return new JsonResponse(['id' => $id, 'message' => 'Aluno deletado com sucesso!'], JsonResponse::HTTP_ACCEPTED);
     }
 
-    public function updated (Request $request, $id) {
+    public function updated(UpdateAlunoRequest $request, $id)
+    {
         $aluno = Aluno::find($id);
 
-        $aluno->name = $request->input('name');
-        $aluno->type_graduation = $request->input('type_graduation');
+        if (!$aluno) {
+            return new JsonResponse(
+                ['id' => $id, 'message' => 'Aluno não encontrado!'],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
 
-        $aluno->save();
+        $aluno->update($request->validated());
 
-        return new JsonResponse($aluno, JsonResponse::HTTP_ACCEPTED);
+        return new JsonResponse(['id' => $id, 'name' => $aluno->name, 'type_graduation' => $aluno->type_graduation], JsonResponse::HTTP_ACCEPTED);
     }
 }

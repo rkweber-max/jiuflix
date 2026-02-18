@@ -44,15 +44,6 @@ if ($method === 'POST' && $uri === '/aluno/create') {
 
     $result = AlunosRepository::created($body['name'], $body['type_graduation']);
 
-    if ($result == null) {
-        http_response_code(404);
-        echo json_encode([
-            'id' => $id,
-            'message' => 'Aluno não encontrado!'
-        ]);
-        exit;
-    }
-
     http_response_code(201);
     echo json_encode([
         'id' => $result[0]['id'],
