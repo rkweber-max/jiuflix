@@ -1,6 +1,9 @@
 <?php
 
-require_once __DIR__ . '../../jiuflix-php/imports.php';
+require __DIR__ . '/imports.php';
+require __DIR__ . '/vendor/autoload.php';
+
+use App\Controllers\ClassmateController;
 
 header('Content-Type: application/json');
 
@@ -54,7 +57,9 @@ if ($method === 'POST' && $uri === '/aluno/create') {
 }
 
 if ($method === "GET" && $uri === '/alunos') {
-    AlunosRepository::getAll();
+    $controller = new ClassmateController();
+
+    $controller->getAll();
 }
 
 if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {

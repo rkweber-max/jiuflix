@@ -1,0 +1,17 @@
+{
+    "name": "rkweber-max/jiuflix",
+    "description": "Projeto de estudo Jiu-Jitsu",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rodrigo Kunzler Weber",
+            "email": "rodrigo.weber@appmax.com.br"
+        }
+    ],
+    "require": {}
+}
