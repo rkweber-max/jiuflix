@@ -65,20 +65,11 @@ if ($method === "GET" && $uri === '/alunos') {
 if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
     $id = (int) $uriParts[1];
 
-    $result = AlunosRepository::getById($id);
-
-    if ($result == null) {
-        http_response_code(404);
-        echo json_encode([
-            'id' => $id,
-            'message' => 'Aluno não encontrado!'
-        ]);
-        exit;
-    }
+    $controller = new ClassmateController();
 
     http_response_code(200);
     echo json_encode([
-        'id' => $result[0]['id'],
+        'id' => $controller->getByID($id),
         'message' => 'Aluno encontrado com sucesso!'
     ]);
     exit;

@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Services;
+
+use App\Repositories\ClassmateRepository;
+
+class ClassmateService {
+    public function getById ($id) {
+        $repository = new ClassmateRepository();
+
+        $classmateId = $repository->getById($id);   
+
+        if (!$classmateId) {
+            http_response_code(404);
+            echo json_encode([
+                'id' => $id,
+                'message' => 'Aluno não encontrado!'
+            ]);
+            exit;
+        }
+
+        return $classmateId[0]['id'];
+    }
+}
