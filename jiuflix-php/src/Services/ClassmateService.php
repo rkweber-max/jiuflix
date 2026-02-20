@@ -21,4 +21,21 @@ class ClassmateService {
 
         return $classmateId[0]['id'];
     }
+
+    public function delete ($id) {
+        $repository = new ClassmateRepository();
+
+        $classmateId = $repository->delete($id);
+
+        if (!$classmateId) {
+            http_response_code(404);
+            echo json_encode([
+                'id' => $id,
+                'message' => 'Aluno não encontrado!'
+            ]);
+            exit;
+        }
+
+        return $classmateId->id;
+    }
 }

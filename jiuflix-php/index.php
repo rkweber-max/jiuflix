@@ -78,20 +78,11 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
 if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
     $id = (int) $uriParts[1];
 
-    $result = AlunosRepository::deleted($id);
-
-    if ($result == null) {
-        http_response_code(404);
-        echo json_encode([
-            'id' => $id,
-            'message' => 'Aluno não encontrado'
-        ]);
-        exit();
-    }
+    $controller = new ClassmateController();
 
     http_response_code(200);
     echo json_encode([
-        'id' => $id,
+        'id' => $controller->delete($id),
         'message' => 'Aluno deletado com sucesso!'
     ]);
     exit();
