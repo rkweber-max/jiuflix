@@ -23,8 +23,6 @@ class ClassmateController {
     public function delete ($id) {
         $service = new ClassmateService();
 
-        // debug($service->delete($id));
-
         return $service->delete($id);
     }
 }
