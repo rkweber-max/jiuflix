@@ -36,4 +36,14 @@ class ClassmateController {
 
         return $service->create($name, $typeGraduation);
     }
+
+    public function update ($name, $typeGraduation, $id) {
+        $service = new ClassmateService();
+
+        $validator = new ValidatorsService();
+        $validator->validateRequiredFields($name, $typeGraduation);
+        $validator->validateTypegraduation($typeGraduation);
+
+        return $service->update($name, $typeGraduation, $id);
+    }
 }

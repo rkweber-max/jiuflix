@@ -76,4 +76,30 @@ class ClassmateRepository {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function updated($name, $typeGraduation, $id)
+    {
+        $pdo = connectionDatabase();
+
+        $sqlId = "SELECT * FROM aluno WHERE id = :id";
+        $stmt = $pdo->prepare($sqlId);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+        if (!$result) {
+            return null;
+        }
+
+        $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation WHERE id = :id";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        $stmt->bindValue(':type_graduation', $typeGraduation, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $result;
+    }
 }

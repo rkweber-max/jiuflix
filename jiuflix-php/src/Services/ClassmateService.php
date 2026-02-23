@@ -46,4 +46,21 @@ class ClassmateService {
 
         return $classmate;
     }
+
+    public function update ($name, $typeGraduation, $id) {
+        $repository = new ClassmateRepository();
+
+        $classmate = $repository->updated($name, $typeGraduation, $id);
+
+        if (!$id) {
+            http_response_code(404);
+            echo json_encode([
+                'id' => $id,
+                'message' => 'Aluno não encontrado!'
+            ]);
+            exit;
+        }
+
+        return $classmate;
+    }
 }
