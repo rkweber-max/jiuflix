@@ -38,4 +38,12 @@ class ClassmateService {
 
         return $classmateId->id;
     }
+
+    public function create ($name, $typeGraduation) {
+        $repository = new ClassmateRepository();
+
+        $classmate = $repository->create($name, $typeGraduation);
+
+        return $classmate;
+    }
 }

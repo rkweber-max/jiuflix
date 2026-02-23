@@ -42,16 +42,15 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 if ($method === 'POST' && $uri === '/aluno/create') {
     $body = json_decode(file_get_contents('php://input'), true);
 
-    validateRequiredFields($body['name'], $body['type_graduation']);
-    validateTypegraduation($body['type_graduation']);
+    $controller = new ClassmateController();
 
-    $result = AlunosRepository::created($body['name'], $body['type_graduation']);
+    $classmate = $controller->create($body['name'], $body['type_graduation']);
 
     http_response_code(201);
     echo json_encode([
-        'id' => $result[0]['id'],
-        'name' => $result[0]['name'],
-        'type_graduation' => $result[0]['type_graduation']
+        'id' => $classmate[0]['id'],
+        'name' => $classmate[0]['name'],
+        'type_graduation' => $classmate[0]['type_graduation']
     ]);
     exit;
 }

@@ -56,4 +56,24 @@ class ClassmateRepository {
 
         return $result;
     }
+
+    public function create ($name, $typeGraduation) {
+        $pdo = connectionDatabase();
+        $sql = "INSERT INTO aluno (name, type_graduation) VALUES (:name, :type_graduation)";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':type_graduation', $typeGraduation);
+        $stmt->execute();
+
+        $id = $pdo->lastInsertId();
+
+        $sqlId = "SELECT * FROM aluno WHERE id = :id";
+        $stmt = $pdo->prepare($sqlId);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

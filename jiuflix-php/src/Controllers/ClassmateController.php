@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Repositories\ClassmateRepository;
 use App\Services\ClassmateService;
+use App\Services\ValidatorsService;
 
 class ClassmateController {
     public function getAll() {
@@ -24,5 +25,15 @@ class ClassmateController {
         $service = new ClassmateService();
 
         return $service->delete($id);
+    }
+
+    public function create ($name, $typeGraduation) {
+        $service = new ClassmateService();
+
+        $validator = new ValidatorsService();
+        $validator->validateRequiredFields($name, $typeGraduation);
+        $validator->validateTypegraduation($typeGraduation);
+
+        return $service->create($name, $typeGraduation);
     }
 }
