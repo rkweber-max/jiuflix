@@ -16,25 +16,15 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 
     $body = json_decode(file_get_contents('php://input'), true);
 
-    validateRequiredFields($body['name'], $body['type_graduation']);
+    $controller = new ClassmateController();
 
-    validateTypegraduation($body['type_graduation']);
-
-    $result = AlunosRepository::updated($body['name'], $body['type_graduation'], $id);
-    if ($result == null) {
-        http_response_code(404);
-        echo json_encode([
-            'id' => $id,
-            'message' => 'Aluno não encontrado!'
-        ]);
-        exit;
-    }
+    $classmate = $controller->update($body['name'], $body['type_graduation'], $id);
 
     http_response_code(200);
     echo json_encode([
-        'id' => $result->id,
-        'name' => $result->name,
-        'type_graduation' => $result->type_graduation
+        'id' => $id,
+        'name' => $classmate->name,
+        'type_graduation' => $classmate->type_graduation
     ]);
     exit;
 }

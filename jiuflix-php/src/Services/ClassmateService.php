@@ -52,7 +52,7 @@ class ClassmateService {
 
         $classmate = $repository->updated($name, $typeGraduation, $id);
 
-        if (!$id) {
+        if (!$classmate) {
             http_response_code(404);
             echo json_encode([
                 'id' => $id,
