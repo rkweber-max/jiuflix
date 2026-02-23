@@ -22,19 +22,21 @@ class ClassmateRepository {
     }
 
     public function getById($id) {
-        $pdo =  connectionDatabase();
+        $database = new Database();
+        $pdo = $database->connectionDatabase();
     
-        $sql = "SELECT * FROM aluno WHERE id = ?";
-    
+        $sql = "SELECT * FROM aluno WHERE id = :id";
+
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(1, $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);                                   
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function delete ($id) {
-        $pdo = connectionDatabase();
+        $database = new Database();
+        $pdo = $database->connectionDatabase();
 
 
         $sqlId = "SELECT * FROM aluno WHERE id = :id";
@@ -58,7 +60,8 @@ class ClassmateRepository {
     }
 
     public function create ($name, $typeGraduation) {
-        $pdo = connectionDatabase();
+        $database = new Database();
+        $pdo = $database->connectionDatabase();
         $sql = "INSERT INTO aluno (name, type_graduation) VALUES (:name, :type_graduation)";
 
         $stmt = $pdo->prepare($sql);
@@ -79,7 +82,8 @@ class ClassmateRepository {
 
     public function updated($name, $typeGraduation, $id)
     {
-        $pdo = connectionDatabase();
+        $database = new Database();
+        $pdo = $database->connectionDatabase();
 
         $sqlId = "SELECT * FROM aluno WHERE id = :id";
         $stmt = $pdo->prepare($sqlId);
