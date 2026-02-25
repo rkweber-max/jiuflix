@@ -37,6 +37,7 @@ class ClassmateService {
         $repository = new ClassmateRepository();
 
         $classmateId = $repository->delete($id);
+        $this->log->info('service.classmate.deleted', ['message' => 'Classmate deleted successfuly']);
 
         if (!$classmateId) {
             http_response_code(404);
@@ -44,6 +45,8 @@ class ClassmateService {
                 'id' => $id,
                 'message' => 'Aluno não encontrado!'
             ]);
+
+            $this->log->error('service.classmate.get_by_id.not_found', ['message' => 'Classmate not found']);
             exit;
         }
 
