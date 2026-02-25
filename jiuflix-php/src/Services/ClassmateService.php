@@ -6,10 +6,18 @@ use App\Repositories\ClassmateRepository;
 use App\Logging\LoggerFactory;
 
 class ClassmateService {
+    private $log;
+
+    public function __construct()
+    {
+        $this->log = LoggerFactory::getLogger();
+    }
+
     public function getById ($id) {
         $repository = new ClassmateRepository();
 
         $classmateId = $repository->getById($id);
+        $this->log->info('service.classmate.get_by_id', ['message' => 'Classmate founded']);
 
         if (!$classmateId) {
             http_response_code(404);
@@ -17,6 +25,8 @@ class ClassmateService {
                 'id' => $id,
                 'message' => 'Aluno não encontrado!'
             ]);
+
+            $this->log->error('service.classmate.get_by_id.not_found', ['message' => 'Classmate not found']);
             exit;
         }
 
