@@ -26,6 +26,8 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
         'name' => $classmate->name,
         'type_graduation' => $classmate->type_graduation
     ]);
+
+    $this->log->info('service.classmate.updated', ['message' => 'Classmate updated successfuly']);
     exit;
 }
 
@@ -42,6 +44,8 @@ if ($method === 'POST' && $uri === '/aluno/create') {
         'name' => $classmate[0]['name'],
         'type_graduation' => $classmate[0]['type_graduation']
     ]);
+
+    $this->log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
     exit;
 }
 
@@ -61,6 +65,8 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
         'id' => $controller->getByID($id),
         'message' => 'Aluno encontrado com sucesso!'
     ]);
+
+    $this->log->info('controller.classmate.bet_by_id', ['message' => 'Classmate founded successfuly']);
     exit;
 }
 
@@ -74,6 +80,8 @@ if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && i
         'id' => $controller->delete($id),
         'message' => 'Aluno deletado com sucesso!'
     ]);
+
+    $this->log->info('controller.classmate.deleted', ['message' => 'Classmates deleted successfuly']);
     exit();
 }
 

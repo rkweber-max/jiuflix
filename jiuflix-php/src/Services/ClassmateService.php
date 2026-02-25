@@ -37,7 +37,6 @@ class ClassmateService {
         $repository = new ClassmateRepository();
 
         $classmateId = $repository->delete($id);
-        $this->log->info('service.classmate.deleted', ['message' => 'Classmate deleted successfuly']);
 
         if (!$classmateId) {
             http_response_code(404);
@@ -46,7 +45,7 @@ class ClassmateService {
                 'message' => 'Aluno não encontrado!'
             ]);
 
-            $this->log->error('service.classmate.get_by_id.not_found', ['message' => 'Classmate not found']);
+            $this->log->error('service.classmate.deleted.not_found', ['message' => 'Classmate not found']);
             exit;
         }
 
@@ -57,9 +56,6 @@ class ClassmateService {
         $repository = new ClassmateRepository();
 
         $classmate = $repository->create($name, $typeGraduation);
-
-        $log = LoggerFactory::getLogger();
-        $log->info('service.classmate.created', ['message' => 'Classmate created successfuly']);
 
         return $classmate;
     }
@@ -75,6 +71,8 @@ class ClassmateService {
                 'id' => $id,
                 'message' => 'Aluno não encontrado!'
             ]);
+
+            $this->log->error('service.classmate.updated.not_found', ['message' => 'Classmate not found']);
             exit;
         }
 

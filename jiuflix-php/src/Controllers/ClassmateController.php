@@ -18,10 +18,11 @@ class ClassmateController {
         $repository = new ClassmateRepository();
         
         $classmates = $repository->getAll();
-        $this->log->info('controller.classmate.get_all', ['message' => 'Classmates founded']);
 
         http_response_code(200);
         echo json_encode(['Alunos' => $classmates, 'message' => 'Alunos retornados com sucesso!']);
+
+        $this->log->info('controller.classmate.get_all', ['message' => 'Classmates founded']);
         exit;
     }
 
