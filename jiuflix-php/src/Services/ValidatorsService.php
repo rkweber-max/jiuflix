@@ -11,7 +11,7 @@ class ValidatorsService {
             echo json_encode(['error' => 'Missing required fields']);
 
             $log = LoggerFactory::getLogger();
-            $log->error('required_fields', ['message' => 'Validation required fields']);
+            $log->error('validator.required_fields', ['message' => 'Validation required fields']);
             exit;
         }
     }
@@ -24,7 +24,7 @@ class ValidatorsService {
             echo json_encode(['message' => 'Type graduation not found']);
 
             $log = LoggerFactory::getLogger();
-            $log->error('type_graduation', ['message' => 'Validation type graduation']);
+            $log->error('validator.type_graduation', ['message' => 'Validation type graduation']);
             die();
         }
     }

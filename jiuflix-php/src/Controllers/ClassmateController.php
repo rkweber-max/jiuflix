@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Logging\LoggerFactory;
 use App\Repositories\ClassmateRepository;
 use App\Services\ClassmateService;
 use App\Services\ValidatorsService;
@@ -33,6 +34,9 @@ class ClassmateController {
         $validator = new ValidatorsService();
         $validator->validateRequiredFields($name, $typeGraduation);
         $validator->validateTypegraduation($typeGraduation);
+
+        $log = LoggerFactory::getLogger();
+        $log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
 
         return $service->create($name, $typeGraduation);
     }

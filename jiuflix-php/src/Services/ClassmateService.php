@@ -46,7 +46,7 @@ class ClassmateService {
         $classmate = $repository->create($name, $typeGraduation);
 
         $log = LoggerFactory::getLogger();
-        $log->info('User created successfuly', ['message' => 'User created successfuly']);
+        $log->info('service.classmate.created', ['message' => 'Classmate created successfuly']);
 
         return $classmate;
     }
