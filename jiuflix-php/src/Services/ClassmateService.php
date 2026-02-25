@@ -3,12 +3,15 @@
 namespace App\Services;
 
 use App\Repositories\ClassmateRepository;
-
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
 class ClassmateService {
     public function getById ($id) {
         $repository = new ClassmateRepository();
 
-        $classmateId = $repository->getById($id);   
+        $classmateId = $repository->getById($id);
 
         if (!$classmateId) {
             http_response_code(404);
@@ -43,6 +46,16 @@ class ClassmateService {
         $repository = new ClassmateRepository();
 
         $classmate = $repository->create($name, $typeGraduation);
+
+        $log = new Logger('local');
+        $stream = new StreamHandler(__DIR__ . '/../storage/logs/jiuflix.log', Level::Info);
+
+        $formmater = new JsonFormatter();
+        $stream->setFormatter($formmater);
+
+        $log->pushHandler($stream);
+
+        $log->info('User created successfuly', ['message' => 'User created successfuly']);
 
         return $classmate;
     }

@@ -13,5 +13,7 @@
             "email": "rodrigo.weber@appmax.com.br"
         }
     ],
-    "require": {}
+    "require": {
+        "monolog/monolog": "^3.10"
+    }
 }

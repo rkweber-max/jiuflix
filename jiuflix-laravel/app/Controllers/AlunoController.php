@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAlunoRequest;
 use App\Models\Aluno;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
-use function PHPUnit\Framework\isEmpty;
 
 class AlunoController extends Controller
 {
@@ -19,6 +18,8 @@ class AlunoController extends Controller
         $typeGraduation = $request->input('type_graduation');
 
         $aluno = Aluno::create(['id' => $id, 'name' => $name, 'type_graduation' => $typeGraduation]);
+
+        Log::channel('json')->info('User created successfuly', ['message' => 'User created successfuly']);
 
         return new JsonResponse($aluno, JsonResponse::HTTP_CREATED);
     }
