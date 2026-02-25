@@ -3,10 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\ClassmateRepository;
-use Monolog\Formatter\JsonFormatter;
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
-use Monolog\Logger;
+use App\Logging\LoggerFactory;
+
 class ClassmateService {
     public function getById ($id) {
         $repository = new ClassmateRepository();
@@ -47,14 +45,7 @@ class ClassmateService {
 
         $classmate = $repository->create($name, $typeGraduation);
 
-        $log = new Logger('local');
-        $stream = new StreamHandler(__DIR__ . '/../storage/logs/jiuflix.log', Level::Info);
-
-        $formmater = new JsonFormatter();
-        $stream->setFormatter($formmater);
-
-        $log->pushHandler($stream);
-
+        $log = LoggerFactory::getLogger();
         $log->info('User created successfuly', ['message' => 'User created successfuly']);
 
         return $classmate;

@@ -3,6 +3,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Controllers\ClassmateController;
+use App\Logging\LoggerFactory;
 
 header('Content-Type: application/json');
 
@@ -78,4 +79,7 @@ if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && i
 
 http_response_code(404);
 echo json_encode(['error' => 'Route not found']);
+
+$log = LoggerFactory::getLogger();
+$log->error('route_not_found', ['message' => 'Route not found']);
 exit;
