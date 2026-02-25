@@ -5,6 +5,8 @@ require __DIR__ . '/vendor/autoload.php';
 use App\Controllers\ClassmateController;
 use App\Logging\LoggerFactory;
 
+$log = LoggerFactory::getLogger(); 
+
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -27,7 +29,7 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
         'type_graduation' => $classmate->type_graduation
     ]);
 
-    $this->log->info('service.classmate.updated', ['message' => 'Classmate updated successfuly']);
+    $log->info('service.classmate.updated', ['message' => 'Classmate updated successfuly']);
     exit;
 }
 
@@ -45,7 +47,7 @@ if ($method === 'POST' && $uri === '/aluno/create') {
         'type_graduation' => $classmate[0]['type_graduation']
     ]);
 
-    $this->log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
+    $log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
     exit;
 }
 
@@ -66,7 +68,7 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
         'message' => 'Aluno encontrado com sucesso!'
     ]);
 
-    $this->log->info('controller.classmate.bet_by_id', ['message' => 'Classmate founded successfuly']);
+    $log->info('controller.classmate.bet_by_id', ['message' => 'Classmate founded successfuly']);
     exit;
 }
 
@@ -81,7 +83,7 @@ if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && i
         'message' => 'Aluno deletado com sucesso!'
     ]);
 
-    $this->log->info('controller.classmate.deleted', ['message' => 'Classmates deleted successfuly']);
+    $log->info('controller.classmate.deleted', ['message' => 'Classmates deleted successfuly']);
     exit();
 }
 
