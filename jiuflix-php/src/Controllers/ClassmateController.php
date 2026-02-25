@@ -8,11 +8,20 @@ use App\Services\ClassmateService;
 use App\Services\ValidatorsService;
 
 class ClassmateController {
+    private $log;
+
+    public function __construct() {
+        $this->log = LoggerFactory::getLogger();
+    }
+
     public function getAll() {
         $repository = new ClassmateRepository();
+        
+        $classmates = $repository->getAll();
+        $this->log->info('controller.classmate.get_all', ['message' => 'Classmates founded']);
 
         http_response_code(200);
-        echo json_encode(['Alunos' => $repository->getAll(), 'message' => 'Alunos retornados com sucesso!']);
+        echo json_encode(['Alunos' => $classmates, 'message' => 'Alunos retornados com sucesso!']);
         exit;
     }
 
@@ -35,8 +44,7 @@ class ClassmateController {
         $validator->validateRequiredFields($name, $typeGraduation);
         $validator->validateTypegraduation($typeGraduation);
 
-        $log = LoggerFactory::getLogger();
-        $log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
+        $this->log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
 
         return $service->create($name, $typeGraduation);
     }
