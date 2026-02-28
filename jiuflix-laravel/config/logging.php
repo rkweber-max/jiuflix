@@ -1,9 +1,12 @@
 <?php
 
+use Monolog\Formatter\NormalizerFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
+use OpenTelemetry\API\Globals as OtelGlobals;
+use OpenTelemetry\Contrib\Logs\Monolog\Handler as OtelMonologHandler;
 
 return [
 
@@ -51,10 +54,10 @@ return [
     |
     */
 
-    'channels' => [
+'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'elastic'],
             'ignore_exceptions' => false,
         ],
 
@@ -132,6 +135,24 @@ return [
             'path' => storage_path('logs/laravel-json.log'),
             'level' => 'debug',
             'formatter' => Monolog\Formatter\JsonFormatter::class,
+        ],
+
+        'otel' => [
+            'driver' => 'monolog',
+            'handler' => OtelMonologHandler::class,
+            'level' => env('LOG_LEVEL', 'debug'),
+            'with' => [
+                'loggerProvider' => OtelGlobals::loggerProvider(),
+            ],
+            'formatter' => NormalizerFormatter::class,
+        ],
+
+        'elastic' => [
+            'driver' => 'custom',
+            'via' => App\Logging\ElasticsearchLogger::class,
+            'endpoint' => env('ELASTIC_ENDPOINT', 'http://localhost:9200'),
+            'index' => env('ELASTIC_LOG_INDEX', 'logs'),
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
     ],
 

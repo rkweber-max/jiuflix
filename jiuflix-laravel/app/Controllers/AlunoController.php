@@ -3,23 +3,24 @@
 namespace App\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateAlunoRequest;
+use App\Http\Requests\ClassmateRequest;
 use App\Models\Aluno;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Enums\Strips;
+use Illuminate\Validation\Rule;
 
 class AlunoController extends Controller
 {
-    public function create(Request $request)
+    public function create(ClassmateRequest $request)
     {
-        $id = $request->input('id');
         $name = $request->input('name');
         $typeGraduation = $request->input('type_graduation');
 
-        $aluno = Aluno::create(['id' => $id, 'name' => $name, 'type_graduation' => $typeGraduation]);
+        $aluno = Aluno::create(['name' => $name, 'type_graduation' => $typeGraduation]);
 
-        Log::channel('json')->info('User created successfuly', ['message' => 'User created successfuly']);
+        Log::info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
 
         return new JsonResponse($aluno, JsonResponse::HTTP_CREATED);
     }
@@ -27,6 +28,8 @@ class AlunoController extends Controller
     public function getAll()
     {
         $alunos = Aluno::all()->toArray();
+
+        Log::info('controller.classmate.get_all', ['message' => 'Classmates founded']);
 
         return new JsonResponse(['Alunos' => $alunos, 'message' => 'Alunos retornados com sucesso!'], JsonResponse::HTTP_OK);
     }
@@ -53,7 +56,7 @@ class AlunoController extends Controller
         return new JsonResponse(['id' => $id, 'message' => 'Aluno deletado com sucesso!'], JsonResponse::HTTP_ACCEPTED);
     }
 
-    public function updated(UpdateAlunoRequest $request, $id)
+    public function updated(ClassmateRequest $request, $id)
     {
         $aluno = Aluno::find($id);
 
