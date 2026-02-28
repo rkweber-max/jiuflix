@@ -139,12 +139,13 @@ return [
 
         'otel' => [
             'driver' => 'monolog',
-            'handler' => OtelMonologHandler::class,
+            'handler' => \App\OpenTelemetry\ElasticsearchDirectHandler::class,
             'level' => env('LOG_LEVEL', 'debug'),
             'with' => [
-                'loggerProvider' => OtelGlobals::loggerProvider(),
+                'endpoint' => env('ELASTIC_ENDPOINT', 'http://localhost:9200'),
+                'index' => env('ELASTIC_LOG_INDEX', 'logs'),
+                'serviceName' => env('OTEL_SERVICE_NAME', 'Laravel'),
             ],
-            'formatter' => NormalizerFormatter::class,
         ],
 
         'elastic' => [

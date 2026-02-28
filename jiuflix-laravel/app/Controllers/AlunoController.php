@@ -20,7 +20,14 @@ class AlunoController extends Controller
 
         $aluno = Aluno::create(['name' => $name, 'type_graduation' => $typeGraduation]);
 
-        Log::info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
+        Log::info('controller.classmate.created', [
+            'message' => 'Classmate created successfuly',
+            'payload' => [
+                'name' => $aluno->name,
+                'type_graduation' => $aluno->type_graduation,
+                'id' => $aluno->id,
+            ]
+        ]);
 
         return new JsonResponse($aluno, JsonResponse::HTTP_CREATED);
     }
