@@ -52,7 +52,8 @@ class ClassmateController {
         return $service->create($dto);
     }
 
-    public function update (ClassmateRequestDTO $dto) {
+    public function update(ClassmateRequestDTO $dto): ClassmateResponseDTO
+    {
         $service = new ClassmateService();
 
         $validator = new ValidatorsService();

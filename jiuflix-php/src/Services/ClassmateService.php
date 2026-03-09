@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\DTOs\ClassmateRequestDTO;
 use App\DTOs\ClassmateResponseDTO;
-use App\Repositories\ClassmateRepository;
 use App\Logging\LoggerFactory;
+use App\Repositories\ClassmateRepository;
 
 class ClassmateService {
     private $log;
@@ -62,22 +62,22 @@ class ClassmateService {
         return $classmate;
     }
 
-    public function update (ClassmateRequestDTO $dto, $id) {
+    public function update(ClassmateRequestDTO $dto, $id): ClassmateResponseDTO
+    {
         $repository = new ClassmateRepository();
 
-        $classmate = $repository->updated($dto->name, $dto->typeGraduation, $id);
+        $classmate = $repository->updated($dto);
 
         if (!$classmate) {
             http_response_code(404);
             echo json_encode([
-                'id' => $dto->id,
+                'id' => $id,
                 'message' => 'Aluno não encontrado!'
             ]);
 
             $this->log->error('service.classmate.updated.not_found', ['message' => 'Classmate not found']);
             exit;
         }
-
         return $classmate;
     }
 }

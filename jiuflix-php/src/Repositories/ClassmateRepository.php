@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Databases\Database;
 use App\DTOs\ClassmateRequestDTO;
 use App\DTOs\ClassmateResponseDTO;
+use App\Exceptions\NotFoundException;
 use PDO;
 
 class ClassmateRepository {
@@ -84,40 +85,62 @@ class ClassmateRepository {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         $responseDto = new ClassmateResponseDTO();
-        $responseDto->id = trim( $result[0]['id']);
-        $responseDto->name = trim( $result[0]['name']);
-        $responseDto->typeGraduation = trim( $result[0]['type_graduation']);
-        $responseDto->age = trim( $result[0]['age']);
-        $responseDto->gender = trim( $result[0]['gender']);
-        $responseDto->category = trim( $result[0]['category']);
+        $responseDto->id = trim((string) $result[0]['id']);
+        $responseDto->name = trim((string) $result[0]['name']);
+        $responseDto->typeGraduation = trim((string) $result[0]['type_graduation']);
+        $responseDto->age = trim((string) ($result[0]['age'] ?? ''));
+        $responseDto->gender = trim((string) ($result[0]['gender'] ?? ''));
+        $responseDto->category = trim((string) ($result[0]['category'] ?? ''));
 
         return $responseDto;
     }
 
-    public function updated($name, $typeGraduation, $id)
+    public function updated(ClassmateRequestDTO $dto): ClassmateResponseDTO
     {
         $database = new Database();
         $pdo = $database->connectionDatabase();
 
         $sqlId = "SELECT * FROM aluno WHERE id = :id";
         $stmt = $pdo->prepare($sqlId);
-        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':id', $dto->id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$result) {
-            return null;
+            throw new NotFoundException('Aluno não encontrado');
         }
 
-        $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation WHERE id = :id";
+        $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation, age = :age, gender = :gender, category = :category WHERE id = :id";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-        $stmt->bindValue(':type_graduation', $typeGraduation, PDO::PARAM_STR);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':name', $dto->name, PDO::PARAM_STR);
+        $stmt->bindValue(':type_graduation', $dto->typeGraduation, PDO::PARAM_STR);
+        $stmt->bindValue(':age', $dto->age ?? '', PDO::PARAM_STR);
+        $stmt->bindValue(':gender', $dto->gender ?? '', PDO::PARAM_STR);
+        $stmt->bindValue(':category', $dto->category ?? '', PDO::PARAM_STR);
+        $stmt->bindValue(':id', $dto->id, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $result;
+        $sqlUpdated = "SELECT * FROM aluno WHERE id = :id";
+        $stmt = $pdo->prepare($sqlUpdated);
+        $stmt->bindValue(':id', $dto->id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $updated = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$updated) {
+            throw new NotFoundException('Aluno não encontrado');
+        }
+
+        $responseDto = new ClassmateResponseDTO();
+        $responseDto->id = trim((string) $updated['id']);
+        $responseDto->name = trim((string) $updated['name']);
+        $responseDto->typeGraduation = trim((string) $updated['type_graduation']);
+        $responseDto->age = trim((string) ($updated['age'] ?? ''));
+        $responseDto->gender = trim((string) ($updated['gender'] ?? ''));
+        $responseDto->category = trim((string) ($updated['category'] ?? ''));
+
+        return $responseDto;
     }
 }

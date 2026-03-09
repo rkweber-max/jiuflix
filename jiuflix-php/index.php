@@ -18,7 +18,7 @@ $uriParts = explode('/', trim($uri, '/'));
 if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
     $id = (int) $uriParts[1];
 
-    $body = json_decode(file_get_contents('php://input'), true);
+    $body = json_decode(file_get_contents('php://input'), true) ?? [];
 
     $dto = new ClassmateRequestDTO(
         $body['name'],
@@ -34,9 +34,12 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 
     http_response_code(200);
     echo json_encode([
-        'id' => $id,
+        'id' => $classmate->id,
         'name' => $classmate->name,
-        'type_graduation' => $classmate->type_graduation
+        'type_graduation' => $classmate->typeGraduation,
+        'age' => $classmate->age,
+        'gender' => $classmate->gender,
+        'category' => $classmate->category
     ]);
 
     $log->info('service.classmate.updated', ['message' => 'Classmate updated successfuly']);
