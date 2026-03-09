@@ -3,7 +3,11 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Controllers\ClassmateController;
+use App\DTOs\ClassmateRequestDTO;
+use App\DTOs\ClassmateResponseDTO;
 use App\Logging\LoggerFactory;
+
+use function Psy\debug;
 
 $log = LoggerFactory::getLogger(); 
 
@@ -37,14 +41,18 @@ if ($method === 'POST' && $uri === '/aluno/create') {
     $body = json_decode(file_get_contents('php://input'), true);
 
     $controller = new ClassmateController();
-
-    $classmate = $controller->create($body['name'], $body['type_graduation']);
+    $dto = new ClassmateRequestDTO($body['name'], $body['type_graduation'], $body['age'], $body['gender'], $body['category']);
+    
+    $classmate = $controller->create($dto);
 
     http_response_code(201);
     echo json_encode([
-        'id' => $classmate[0]['id'],
-        'name' => $classmate[0]['name'],
-        'type_graduation' => $classmate[0]['type_graduation']
+        'id' => $classmate->id,
+        'name' => $classmate->name, 
+        'type_graduation' => $classmate->typeGraduation,
+        'age' => $classmate->age,
+        'gender' => $classmate->gender,
+        'category' => $classmate->category
     ]);
 
     $log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
@@ -61,11 +69,16 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
     $id = (int) $uriParts[1];
 
     $controller = new ClassmateController();
+    $classmate = $controller->getByID($id);
 
     http_response_code(200);
     echo json_encode([
-        'id' => $controller->getByID($id),
-        'message' => 'Aluno encontrado com sucesso!'
+        'id' => $classmate['id'],
+        'name' => trim($classmate['name']),
+        'type_graduation' => trim($classmate['type_graduation']),
+        'age' => trim($classmate['age']),
+        'gender' => trim($classmate['gender']),
+        'category' => trim($classmate['category'])
     ]);
 
     $log->info('controller.classmate.bet_by_id', ['message' => 'Classmate founded successfuly']);

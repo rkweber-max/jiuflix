@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Databases\Database;
+use App\DTOs\ClassmateRequestDTO;
+use App\DTOs\ClassmateResponseDTO;
 use PDO;
 
 class ClassmateRepository {
@@ -59,14 +61,17 @@ class ClassmateRepository {
         return $result;
     }
 
-    public function create ($name, $typeGraduation) {
+    public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
         $database = new Database();
         $pdo = $database->connectionDatabase();
-        $sql = "INSERT INTO aluno (name, type_graduation) VALUES (:name, :type_graduation)";
+        $sql = "INSERT INTO aluno (name, type_graduation, age, gender, category) VALUES (:name, :type_graduation, :age, :gender, :category)";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':name', $name);
-        $stmt->bindValue(':type_graduation', $typeGraduation);
+        $stmt->bindValue(':name', $dto->name);
+        $stmt->bindValue(':type_graduation', $dto->typeGraduation);
+        $stmt->bindValue(':age', $dto->age);
+        $stmt->bindValue(':gender', $dto->gender);
+        $stmt->bindValue(':category', $dto->category);
         $stmt->execute();
 
         $id = $pdo->lastInsertId();
@@ -77,7 +82,16 @@ class ClassmateRepository {
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+        
+        $responseDto = new ClassmateResponseDTO();
+        $responseDto->id = trim( $result[0]['id']);
+        $responseDto->name = trim( $result[0]['name']);
+        $responseDto->typeGraduation = trim( $result[0]['type_graduation']);
+        $responseDto->age = trim( $result[0]['age']);
+        $responseDto->gender = trim( $result[0]['gender']);
+        $responseDto->category = trim( $result[0]['category']);
+
+        return $responseDto;
     }
 
     public function updated($name, $typeGraduation, $id)

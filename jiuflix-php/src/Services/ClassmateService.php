@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTOs\ClassmateRequestDTO;
+use App\DTOs\ClassmateResponseDTO;
 use App\Repositories\ClassmateRepository;
 use App\Logging\LoggerFactory;
 
@@ -30,7 +32,7 @@ class ClassmateService {
             exit;
         }
 
-        return $classmateId[0]['id'];
+        return $classmateId[0];
     }
 
     public function delete ($id) {
@@ -52,10 +54,10 @@ class ClassmateService {
         return $classmateId->id;
     }
 
-    public function create ($name, $typeGraduation) {
+    public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
         $repository = new ClassmateRepository();
 
-        $classmate = $repository->create($name, $typeGraduation);
+        $classmate = $repository->create($dto);
 
         return $classmate;
     }

@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\DTOs\ClassmateRequestDTO;
+use App\DTOs\ClassmateResponseDTO;
 use App\Logging\LoggerFactory;
 use App\Repositories\ClassmateRepository;
 use App\Services\ClassmateService;
@@ -38,25 +40,25 @@ class ClassmateController {
         return $service->delete($id);
     }
 
-    public function create ($name, $typeGraduation) {
+    public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
         $service = new ClassmateService();
 
         $validator = new ValidatorsService();
-        $validator->validateRequiredFields($name, $typeGraduation);
-        $validator->validateTypegraduation($typeGraduation);
+        $validator->validateRequiredFields($dto);
+        $validator->validateTypegraduation($dto);
 
         $this->log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
 
-        return $service->create($name, $typeGraduation);
+        return $service->create($dto);
     }
 
-    public function update ($name, $typeGraduation, $id) {
+    public function update ($name, $typeGraduation, $age, $gender, $category, $id) {
         $service = new ClassmateService();
 
         $validator = new ValidatorsService();
-        $validator->validateRequiredFields($name, $typeGraduation);
+        $validator->validateRequiredFields($name, $typeGraduation, $age, $gender, $category);
         $validator->validateTypegraduation($typeGraduation);
 
-        return $service->update($name, $typeGraduation, $id);
+        return $service->update($name, $typeGraduation, $age, $gender, $category, $id);
     }
 }
