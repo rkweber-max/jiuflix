@@ -62,15 +62,15 @@ class ClassmateService {
         return $classmate;
     }
 
-    public function update ($name, $typeGraduation, $id) {
+    public function update (ClassmateRequestDTO $dto, $id) {
         $repository = new ClassmateRepository();
 
-        $classmate = $repository->updated($name, $typeGraduation, $id);
+        $classmate = $repository->updated($dto->name, $dto->typeGraduation, $id);
 
         if (!$classmate) {
             http_response_code(404);
             echo json_encode([
-                'id' => $id,
+                'id' => $dto->id,
                 'message' => 'Aluno não encontrado!'
             ]);
 

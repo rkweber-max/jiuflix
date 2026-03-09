@@ -52,13 +52,13 @@ class ClassmateController {
         return $service->create($dto);
     }
 
-    public function update ($name, $typeGraduation, $age, $gender, $category, $id) {
+    public function update (ClassmateRequestDTO $dto) {
         $service = new ClassmateService();
 
         $validator = new ValidatorsService();
-        $validator->validateRequiredFields($name, $typeGraduation, $age, $gender, $category);
-        $validator->validateTypegraduation($typeGraduation);
+        $validator->validateRequiredFields($dto);
+        $validator->validateTypegraduation($dto);
 
-        return $service->update($name, $typeGraduation, $age, $gender, $category, $id);
+        return $service->update($dto, $dto->id);
     }
 }

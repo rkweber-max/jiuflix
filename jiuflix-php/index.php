@@ -7,8 +7,6 @@ use App\DTOs\ClassmateRequestDTO;
 use App\DTOs\ClassmateResponseDTO;
 use App\Logging\LoggerFactory;
 
-use function Psy\debug;
-
 $log = LoggerFactory::getLogger(); 
 
 header('Content-Type: application/json');
@@ -22,9 +20,17 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 
     $body = json_decode(file_get_contents('php://input'), true);
 
-    $controller = new ClassmateController();
+    $dto = new ClassmateRequestDTO(
+        $body['name'],
+        $body['type_graduation'],
+        $body['age'],
+        $body['gender'],
+        $body['category'],
+        $id
+    );
 
-    $classmate = $controller->update($body['name'], $body['type_graduation'], $id);
+    $controller = new ClassmateController();
+    $classmate = $controller->update($dto);
 
     http_response_code(200);
     echo json_encode([
