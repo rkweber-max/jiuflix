@@ -88,9 +88,9 @@ class ClassmateRepository {
         $responseDto->id = trim((string) $result[0]['id']);
         $responseDto->name = trim((string) $result[0]['name']);
         $responseDto->typeGraduation = trim((string) $result[0]['type_graduation']);
-        $responseDto->age = trim((string) ($result[0]['age'] ?? ''));
-        $responseDto->gender = trim((string) ($result[0]['gender'] ?? ''));
-        $responseDto->category = trim((string) ($result[0]['category'] ?? ''));
+        $responseDto->age = trim((string) ($result[0]['age']));
+        $responseDto->gender = trim((string) ($result[0]['gender']));
+        $responseDto->category = trim(($result[0]['category']));
 
         return $responseDto;
     }
@@ -116,9 +116,9 @@ class ClassmateRepository {
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':name', $dto->name, PDO::PARAM_STR);
         $stmt->bindValue(':type_graduation', $dto->typeGraduation, PDO::PARAM_STR);
-        $stmt->bindValue(':age', $dto->age ?? '', PDO::PARAM_STR);
-        $stmt->bindValue(':gender', $dto->gender ?? '', PDO::PARAM_STR);
-        $stmt->bindValue(':category', $dto->category ?? '', PDO::PARAM_STR);
+        $stmt->bindValue(':age', $dto->age, PDO::PARAM_STR);
+        $stmt->bindValue(':gender', $dto->gender, PDO::PARAM_STR);
+        $stmt->bindValue(':category', $dto->category, PDO::PARAM_STR);
         $stmt->bindValue(':id', $dto->id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -134,12 +134,12 @@ class ClassmateRepository {
         }
 
         $responseDto = new ClassmateResponseDTO();
-        $responseDto->id = trim((string) $updated['id']);
-        $responseDto->name = trim((string) $updated['name']);
-        $responseDto->typeGraduation = trim((string) $updated['type_graduation']);
-        $responseDto->age = trim((string) ($updated['age'] ?? ''));
-        $responseDto->gender = trim((string) ($updated['gender'] ?? ''));
-        $responseDto->category = trim((string) ($updated['category'] ?? ''));
+        $responseDto->id = trim($updated['id']);
+        $responseDto->name = trim($updated['name']);
+        $responseDto->typeGraduation = trim($updated['type_graduation']);
+        $responseDto->age = trim(($updated['age']));
+        $responseDto->gender = trim(($updated['gender']));
+        $responseDto->category = trim(($updated['category']));
 
         return $responseDto;
     }
