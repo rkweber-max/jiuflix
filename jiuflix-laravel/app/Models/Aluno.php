@@ -10,7 +10,13 @@ class Aluno extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['name', 'type_graduation'];
+    protected $fillable = [
+        'name',
+        'type_graduation',
+        'age',
+        'gender',
+        'category'
+    ];
 
     public $timestamps = false;
 

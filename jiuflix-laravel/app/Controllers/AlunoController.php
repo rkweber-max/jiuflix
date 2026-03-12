@@ -2,14 +2,13 @@
 
 namespace App\Controllers;
 
+use App\DTO\Request\ClassmateRequestDTO;
+use App\DTO\Response\ClassmateResponseDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassmateRequest;
 use App\Models\Aluno;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Enums\Strips;
-use Illuminate\Validation\Rule;
 
 class AlunoController extends Controller
 {
@@ -20,22 +19,32 @@ class AlunoController extends Controller
             'request_data' => $request->only(['name', 'type_graduation'])
         ]);
 
-        $name = $request->input('name');
-        $typeGraduation = $request->input('type_graduation');
+        $dto = ClassmateRequestDTO::fromRequest($request);
 
         try {
-            $aluno = Aluno::create(['name' => $name, 'type_graduation' => $typeGraduation]);
+            $aluno = Aluno::create([
+                'name' => $dto->name,
+                'type_graduation' => $dto->typeGraduation->value,
+                'age' => $dto->age,
+                'gender' => $dto->gender,
+                'category' => $dto->category
+            ]);
 
             Log::info('controller.classmate.create.success', [
                 'message' => 'Classmate created successfully',
                 'payload' => [
                     'name' => $aluno->name,
                     'type_graduation' => $aluno->type_graduation,
+                    'age' => $aluno->age,
+                    'gender' => $aluno->gender,
+                    'category' => $aluno->category,
                     'id' => $aluno->id,
                 ]
             ]);
 
-            return new JsonResponse($aluno, JsonResponse::HTTP_CREATED);
+            $response = ClassmateResponseDTO::fromModel($aluno);
+
+            return new JsonResponse($response->toArray(), JsonResponse::HTTP_CREATED);
         } catch (\Exception $e) {
             Log::error('controller.classmate.create.error', [
                 'message' => 'Failed to create classmate',

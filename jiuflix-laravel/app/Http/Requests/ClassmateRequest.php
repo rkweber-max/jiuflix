@@ -37,6 +37,9 @@ class ClassmateRequest extends FormRequest
                 'required',
                 Rule::in(Strips::values()),
             ],
+            'age' => 'required|integer',
+            'gender' => 'required|string',
+            'category' => 'required|string',
         ];
     }
 
