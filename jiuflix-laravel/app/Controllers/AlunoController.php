@@ -3,10 +3,13 @@
 namespace App\Controllers;
 
 use App\DTO\Request\ClassmateRequestDTO;
-use App\DTO\Response\ClassmateResponseDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassmateRequest;
 use App\Models\Aluno;
+use App\Repository\AlunoCsvRepository;
+use App\Repository\AlunoEloquentRepository;
+use App\Repository\AlunoTxtRepository;
+use App\Services\AlunoService;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -22,19 +25,25 @@ class AlunoController extends Controller
         $dto = ClassmateRequestDTO::fromRequest($request);
 
         try {
-            $aluno = Aluno::create([
+            $arrayClassmate = [
                 'name' => $dto->name,
                 'type_graduation' => $dto->typeGraduation->value,
                 'age' => $dto->age,
                 'gender' => $dto->gender,
                 'category' => $dto->category
-            ]);
+            ];
+
+            $repository = new AlunoTxtRepository();
+
+            $service = new AlunoService();
+            $service->setRepository($repository);
+            $aluno = $service->createAluno($arrayClassmate);
 
             Log::info('controller.classmate.create.success', [
                 'message' => 'Classmate created successfully',
                 'payload' => [
                     'name' => $aluno->name,
-                    'type_graduation' => $aluno->type_graduation,
+                    'type_graduation' => $aluno->typeGraduation->value,
                     'age' => $aluno->age,
                     'gender' => $aluno->gender,
                     'category' => $aluno->category,
@@ -42,9 +51,7 @@ class AlunoController extends Controller
                 ]
             ]);
 
-            $response = ClassmateResponseDTO::fromModel($aluno);
-
-            return new JsonResponse($response->toArray(), JsonResponse::HTTP_CREATED);
+            return new JsonResponse($aluno->toArray(), JsonResponse::HTTP_CREATED);
         } catch (\Exception $e) {
             Log::error('controller.classmate.create.error', [
                 'message' => 'Failed to create classmate',
