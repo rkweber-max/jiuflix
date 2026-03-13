@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\DTO\Request\ClassmateRequestDTO;
+use App\Enums\Strips;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassmateRequest;
 use App\Models\Aluno;
@@ -34,8 +35,8 @@ class AlunoController extends Controller
             ];
 
             $repository = new AlunoTxtRepository();
-
             $service = new AlunoService();
+
             $service->setRepository($repository);
             $aluno = $service->createAluno($arrayClassmate);
 
@@ -157,12 +158,6 @@ class AlunoController extends Controller
 
     public function updated(ClassmateRequest $request, $id)
     {
-        Log::info('controller.classmate.update.start', [
-            'message' => 'Starting to update classmate',
-            'classmate_id' => $id,
-            'request_data' => $request->validated()
-        ]);
-
         try {
             $aluno = Aluno::find($id);
 
@@ -177,18 +172,22 @@ class AlunoController extends Controller
                 );
             }
 
-            $aluno->update($request->validated());
+            $repository = new AlunoEloquentRepository();
+            $service = new AlunoService();
+            $service->setRepository($repository);
+            
+            $aluno = $service->updateAluno($id, $request->validated());
 
             Log::info('controller.classmate.update.success', [
                 'message' => 'Classmate updated successfully',
                 'classmate_id' => $id,
                 'updated_data' => [
                     'name' => $aluno->name,
-                    'type_graduation' => $aluno->type_graduation
+                    'type_graduation' => $aluno->typeGraduation->value
                 ]
             ]);
 
-            return new JsonResponse(['id' => $id, 'name' => $aluno->name, 'type_graduation' => $aluno->type_graduation], JsonResponse::HTTP_ACCEPTED);
+            return new JsonResponse($aluno->toArray(), JsonResponse::HTTP_ACCEPTED);
         } catch (\Exception $e) {
             Log::error('controller.classmate.update.error', [
                 'message' => 'Failed to update classmate',

@@ -13,4 +13,13 @@ class AlunoEloquentRepository implements AlunoRepository
         $response = ClassmateResponseDTO::fromModel($aluno);
         return $response;
     }
+
+    public function updateAluno(int $id, array $array): ClassmateResponseDTO
+    {
+        $aluno = Aluno::findOrFail($id);
+        $aluno->update($array);
+
+        $response = ClassmateResponseDTO::fromModel($aluno);
+        return $response;
+    }
 }

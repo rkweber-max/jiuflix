@@ -28,4 +28,9 @@ class AlunoTxtRepository implements AlunoRepository
         
         return $classmateResponse;
     }
+
+    public function updateAluno(int $id, array $array): ClassmateResponseDTO
+    {
+        throw new \Exception('Not implemented');
+    }
 }

@@ -35,4 +35,9 @@ class AlunoCsvRepository implements AlunoRepository
         fclose($file);
         return $classmateResponse;
     }
+
+    public function updateAluno(int $id, array $array): ClassmateResponseDTO
+    {
+        throw new \Exception('Not implemented');
+    }
 }

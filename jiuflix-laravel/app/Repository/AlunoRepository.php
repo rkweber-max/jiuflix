@@ -6,4 +6,6 @@ use App\DTO\Response\ClassmateResponseDTO;
 
 interface AlunoRepository {
     public function createAluno (array $array): ClassmateResponseDTO;
+    
+    public function updateAluno (int $id, array $array): ClassmateResponseDTO;
 }
