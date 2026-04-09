@@ -95,3 +95,26 @@
 {"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-05T18:45:38.933771+00:00","extra":{}}
 {"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-05T18:48:28.934863+00:00","extra":{}}
 {"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-05T18:48:28.998080+00:00","extra":{}}
+{"message":"controller.classmate.get_all","context":{"message":"Classmates founded"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-26T18:53:17.235241+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-26T18:53:20.778316+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-26T18:53:20.812200+00:00","extra":{}}
+{"message":"route_not_found","context":{"message":"Route not found"},"level":400,"level_name":"ERROR","channel":"jiuflix","datetime":"2026-03-26T18:54:04.217790+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-26T18:54:04.218860+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-26T18:54:04.241430+00:00","extra":{}}
+{"message":"route_not_found","context":{"message":"Route not found"},"level":400,"level_name":"ERROR","channel":"jiuflix","datetime":"2026-03-26T18:54:09.883781+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-26T18:54:35.410506+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-03-26T18:54:35.450394+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-08T01:14:09.566788+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-08T01:14:09.679502+00:00","extra":{}}
+{"message":"controller.classmate.get_all","context":{"message":"Classmates founded"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-08T01:15:20.064655+00:00","extra":{}}
+{"message":"controller.classmate.get_all","context":{"message":"Classmates founded"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-08T01:15:29.811536+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-08T01:15:43.855843+00:00","extra":{}}
+{"message":"controller.classmate.created","context":{"message":"Classmate created successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-08T01:15:43.872067+00:00","extra":{}}
+{"message":"controller.classmate.get_all","context":{"message":"Classmates founded"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-08T01:15:46.952545+00:00","extra":{}}
+{"message":"controller.classmate.get_all","context":{"message":"Classmates founded"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-09T14:05:52.815019+00:00","extra":{}}
+{"message":"service.classmate.get_by_id","context":{"message":"Classmate founded"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-09T14:05:56.290340+00:00","extra":{}}
+{"message":"controller.classmate.bet_by_id","context":{"message":"Classmate founded successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-09T14:05:56.290602+00:00","extra":{}}
+{"message":"controller.classmate.deleted","context":{"message":"Classmates deleted successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-09T14:08:06.452786+00:00","extra":{}}
+{"message":"service.classmate.get_by_id","context":{"message":"Classmate founded"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-09T14:09:58.344142+00:00","extra":{}}
+{"message":"controller.classmate.bet_by_id","context":{"message":"Classmate founded successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-09T14:09:58.344867+00:00","extra":{}}
+{"message":"service.classmate.updated","context":{"message":"Classmate updated successfuly"},"level":200,"level_name":"INFO","channel":"jiuflix","datetime":"2026-04-09T14:10:07.993707+00:00","extra":{}}

@@ -10,6 +10,7 @@ class ComposerStaticInit1c29f9749a9233521db9052c0d458354
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Pecee\\' => 6,
         ),
         'M' => 
         array (
@@ -25,6 +26,10 @@ class ComposerStaticInit1c29f9749a9233521db9052c0d458354
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'Pecee\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pecee/simple-router/src/Pecee',
         ),
         'Monolog\\' => 
         array (

@@ -4,10 +4,10 @@ require __DIR__ . '/vendor/autoload.php';
 
 use App\Controllers\ClassmateController;
 use App\DTOs\ClassmateRequestDTO;
-use App\DTOs\ClassmateResponseDTO;
 use App\Logging\LoggerFactory;
+use Pecee\SimpleRouter\SimpleRouter;
 
-$log = LoggerFactory::getLogger(); 
+$log = LoggerFactory::getLogger();
 
 header('Content-Type: application/json');
 
@@ -15,8 +15,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 $uriParts = explode('/', trim($uri, '/'));
 
-if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
-    $id = (int) $uriParts[1];
+SimpleRouter::put('/aluno/{id}', function($id) use($log) {
+    $id = (int) $id;
 
     $body = json_decode(file_get_contents('php://input'), true) ?? [];
 
@@ -44,20 +44,20 @@ if ($method === "PUT" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_n
 
     $log->info('service.classmate.updated', ['message' => 'Classmate updated successfuly']);
     exit;
-}
+});
 
-if ($method === 'POST' && $uri === '/aluno/create') {
+SimpleRouter::post('/aluno/create', function () use ($log) {
     $body = json_decode(file_get_contents('php://input'), true);
 
     $controller = new ClassmateController();
     $dto = new ClassmateRequestDTO($body['name'], $body['type_graduation'], $body['age'], $body['gender'], $body['category']);
-    
+
     $classmate = $controller->create($dto);
 
     http_response_code(201);
     echo json_encode([
         'id' => $classmate->id,
-        'name' => $classmate->name, 
+        'name' => $classmate->name,
         'type_graduation' => $classmate->typeGraduation,
         'age' => $classmate->age,
         'gender' => $classmate->gender,
@@ -66,16 +66,16 @@ if ($method === 'POST' && $uri === '/aluno/create') {
 
     $log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
     exit;
-}
+});
 
-if ($method === "GET" && $uri === '/alunos') {
+SimpleRouter::get('/alunos', function () use ($log) {
     $controller = new ClassmateController();
 
     $controller->getAll();
-}
+});
 
-if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
-    $id = (int) $uriParts[1];
+SimpleRouter::get('/aluno/{id}', function($id) use ($log) {
+    $id = (int) $id;
 
     $controller = new ClassmateController();
     $classmate = $controller->getByID($id);
@@ -92,10 +92,10 @@ if ($method ===  "GET" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_
 
     $log->info('controller.classmate.bet_by_id', ['message' => 'Classmate founded successfuly']);
     exit;
-}
+});
 
-if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && is_numeric($uriParts[1])) {
-    $id = (int) $uriParts[1];
+SimpleRouter::delete('/aluno/{id}', function($id) use($log) {
+    $id = (int) $id;
 
     $controller = new ClassmateController();
 
@@ -107,11 +107,12 @@ if ($method === "DELETE" && $uriParts[0] === 'aluno' && isset($uriParts[1]) && i
 
     $log->info('controller.classmate.deleted', ['message' => 'Classmates deleted successfuly']);
     exit();
-}
+});
+
+SimpleRouter::start();
 
 http_response_code(404);
 echo json_encode(['error' => 'Route not found']);
-
-$log = LoggerFactory::getLogger();
 $log->error('route_not_found', ['message' => 'Route not found']);
+
 exit;

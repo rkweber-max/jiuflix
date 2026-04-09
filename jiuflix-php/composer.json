@@ -14,6 +14,7 @@
         }
     ],
     "require": {
-        "monolog/monolog": "^3.10"
+        "monolog/monolog": "^3.10",
+        "pecee/simple-router": "^5.4"
     }
 }

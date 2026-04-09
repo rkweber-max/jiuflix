@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Controllers\AlunoController;
+use App\Http\Middleware\SanitizeStudentData;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +19,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/aluno/create', [AlunoController::class, 'create']);
+Route::post('/aluno/create', [AlunoController::class, 'create'])->middleware(SanitizeStudentData::class);
 Route::get('/alunos', [AlunoController::class, 'getAll']);
 Route::get('/aluno/{id}', [AlunoController::class, 'show'])->whereNumber('id');
 Route::delete('/aluno/{id}', [AlunoController::class, 'deleted'])->whereNumber('id');

@@ -3,11 +3,9 @@
 namespace App\Controllers;
 
 use App\DTO\Request\ClassmateRequestDTO;
-use App\Enums\Strips;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassmateRequest;
 use App\Models\Aluno;
-use App\Repository\AlunoCsvRepository;
 use App\Repository\AlunoEloquentRepository;
 use App\Repository\AlunoTxtRepository;
 use App\Services\AlunoService;
@@ -34,7 +32,7 @@ class AlunoController extends Controller
                 'category' => $dto->category
             ];
 
-            $repository = new AlunoTxtRepository();
+            $repository = new AlunoEloquentRepository();
             $service = new AlunoService();
 
             $service->setRepository($repository);

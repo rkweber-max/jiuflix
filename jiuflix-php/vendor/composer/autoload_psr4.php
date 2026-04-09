@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
+    'Pecee\\' => array($vendorDir . '/pecee/simple-router/src/Pecee'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'App\\' => array($baseDir . '/src'),
 );
