@@ -13,6 +13,9 @@
             "email": "rodrigo.weber@appmax.com.br"
         }
     ],
+    "require-dev": {
+        "phpunit/phpunit": "^10.1"
+    },
     "require": {
         "monolog/monolog": "^3.10",
         "pecee/simple-router": "^5.4"

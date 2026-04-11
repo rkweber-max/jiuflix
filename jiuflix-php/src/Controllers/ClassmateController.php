@@ -49,8 +49,6 @@ class ClassmateController {
 
         $this->log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
 
-        
-
         return $service->create($dto);
     }
 

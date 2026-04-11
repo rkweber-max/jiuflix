@@ -9,16 +9,16 @@ use App\Repositories\ClassmateRepository;
 
 class ClassmateService {
     private $log;
+    private ClassmateRepository $repository;
 
-    public function __construct()
+    public function __construct(?ClassmateRepository $repository = null)
     {
         $this->log = LoggerFactory::getLogger();
+        $this->repository = $repository ?? new ClassmateRepository();
     }
 
     public function getById ($id) {
-        $repository = new ClassmateRepository();
-
-        $classmateId = $repository->getById($id);
+        $classmateId = $this->repository->getById($id);
         $this->log->info('service.classmate.get_by_id', ['message' => 'Classmate founded']);
 
         if (!$classmateId) {
@@ -36,9 +36,7 @@ class ClassmateService {
     }
 
     public function delete ($id) {
-        $repository = new ClassmateRepository();
-
-        $classmateId = $repository->delete($id);
+        $classmateId = $this->repository->delete($id);
 
         if (!$classmateId) {
             http_response_code(404);
@@ -55,18 +53,14 @@ class ClassmateService {
     }
 
     public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
-        $repository = new ClassmateRepository();
-
-        $classmate = $repository->create($dto);
+        $classmate = $this->repository->create($dto);
 
         return $classmate;
     }
 
     public function update(ClassmateRequestDTO $dto, $id): ClassmateResponseDTO
     {
-        $repository = new ClassmateRepository();
-
-        $classmate = $repository->updated($dto);
+        $classmate = $this->repository->updated($dto);
 
         if (!$classmate) {
             http_response_code(404);

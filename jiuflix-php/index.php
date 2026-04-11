@@ -13,7 +13,6 @@ header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
-$uriParts = explode('/', trim($uri, '/'));
 
 SimpleRouter::put('/aluno/{id}', function($id) use($log) {
     $id = (int) $id;
