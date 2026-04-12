@@ -30,17 +30,18 @@ class CreateClassmateTest extends TestCase
         $response->gender = 'M';
         $response->category = 'ML';
 
-        // Criando mock do repositorio aluno
         $repository = $this->createMock(ClassmateRepository::class);
         $repository
+            ->expects($this->once())
             ->method('create')
+            ->with($this->identicalTo($dto))
             ->willReturn($response);
 
         $service = new ClassmateService($repository);
 
         $aluno = $service->create($dto);
 
-        $this->assertEquals($response, $aluno);
+        $this->assertSame($response, $aluno);
     }
 
     public function test_failed_path(): void
