@@ -6,6 +6,7 @@ use App\Databases\Database;
 use App\DTOs\ClassmateRequestDTO;
 use App\DTOs\ClassmateResponseDTO;
 use App\Logging\LoggerFactory;
+use App\Exceptions\InvalidTypeGraduationException;
 use App\Repositories\ClassmateRepository;
 use App\Services\ClassmateService;
 use App\Services\ValidatorsService;
@@ -43,7 +44,13 @@ class ClassmateController {
     public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
         $validator = new ValidatorsService();
         $validator->validateRequiredFields($dto);
-        $validator->validateTypegraduation($dto);
+        try {
+            $validator->validateTypegraduation($dto);
+        } catch (InvalidTypeGraduationException) {
+            http_response_code(404);
+            echo json_encode(['message' => 'Type graduation not found']);
+            exit;
+        }
 
         $this->log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
 
@@ -54,7 +61,13 @@ class ClassmateController {
     {
         $validator = new ValidatorsService();
         $validator->validateRequiredFields($dto);
-        $validator->validateTypegraduation($dto);
+        try {
+            $validator->validateTypegraduation($dto);
+        } catch (InvalidTypeGraduationException) {
+            http_response_code(404);
+            echo json_encode(['message' => 'Type graduation not found']);
+            exit;
+        }
 
         return $this->service->update($dto, $dto->id);
     }

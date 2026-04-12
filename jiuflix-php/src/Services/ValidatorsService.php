@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\ClassmateRequestDTO;
+use App\Exceptions\InvalidTypeGraduationException;
 use App\Logging\LoggerFactory;
 
 class ValidatorsService {
@@ -20,13 +21,10 @@ class ValidatorsService {
     public function validateTypegraduation (ClassmateRequestDTO $dto) {
         $strips = ["BRANCA", "PRETA", "AZUL"];
     
-        if (!in_array($dto->typeGraduation, $strips)) {
-            http_response_code(404);
-            echo json_encode(['message' => 'Type graduation not found']);
-
+        if (!in_array($dto->typeGraduation, $strips, true)) {
             $log = LoggerFactory::getLogger();
             $log->error('validator.type_graduation', ['message' => 'Validation type graduation']);
-            die();
+            throw new InvalidTypeGraduationException('Type graduation not found');
         }
     }
 }
