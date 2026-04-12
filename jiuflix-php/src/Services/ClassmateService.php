@@ -14,7 +14,7 @@ class ClassmateService {
     public function __construct(ClassmateRepository $repository)
     {
         $this->log = LoggerFactory::getLogger();
-        $this->repository = $repository ?? new ClassmateRepository();
+        $this->repository = $repository;
     }
 
     public function getById ($id) {

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Databases\Database;
 use App\DTOs\ClassmateRequestDTO;
 use App\DTOs\ClassmateResponseDTO;
 use App\Logging\LoggerFactory;
@@ -17,8 +18,9 @@ class ClassmateController {
     }
 
     public function getAll() {
-        $repository = new ClassmateRepository();
-        
+        $pdo = (new Database())->connectionDatabase();
+        $repository = new ClassmateRepository($pdo);
+
         $classmates = $repository->getAll();
 
         http_response_code(200);
@@ -29,19 +31,19 @@ class ClassmateController {
     }
 
     public function getByID ($id) {
-        $service = new ClassmateService();
+        $service = $this->classmateService();
 
         return $service->getById($id);
     }
 
     public function delete ($id) {
-        $service = new ClassmateService();
+        $service = $this->classmateService();
 
         return $service->delete($id);
     }
 
     public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
-        $service = new ClassmateService();
+        $service = $this->classmateService();
 
         $validator = new ValidatorsService();
         $validator->validateRequiredFields($dto);
@@ -54,12 +56,19 @@ class ClassmateController {
 
     public function update(ClassmateRequestDTO $dto): ClassmateResponseDTO
     {
-        $service = new ClassmateService();
+        $service = $this->classmateService();
 
         $validator = new ValidatorsService();
         $validator->validateRequiredFields($dto);
         $validator->validateTypegraduation($dto);
 
         return $service->update($dto, $dto->id);
+    }
+
+    private function classmateService(): ClassmateService
+    {
+        $pdo = (new Database())->connectionDatabase();
+
+        return new ClassmateService(new ClassmateRepository($pdo));
     }
 }

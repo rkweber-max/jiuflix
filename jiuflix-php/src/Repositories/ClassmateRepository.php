@@ -2,21 +2,21 @@
 
 namespace App\Repositories;
 
-use App\Databases\Database;
 use App\DTOs\ClassmateRequestDTO;
 use App\DTOs\ClassmateResponseDTO;
 use App\Exceptions\NotFoundException;
 use PDO;
 
 class ClassmateRepository {
+    public function __construct(private PDO $pdo)
+    {
+    }
+
     public function getAll()
     {
-        $database = new Database();
-        $pdo = $database->connectionDatabase();
-
         $sql = "SELECT * FROM aluno";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
 
         $array = $stmt->fetchALL(PDO::FETCH_ASSOC);
@@ -25,12 +25,9 @@ class ClassmateRepository {
     }
 
     public function getById($id) {
-        $database = new Database();
-        $pdo = $database->connectionDatabase();
-    
         $sql = "SELECT * FROM aluno WHERE id = :id";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -38,12 +35,8 @@ class ClassmateRepository {
     }
 
     public function delete ($id) {
-        $database = new Database();
-        $pdo = $database->connectionDatabase();
-
-
         $sqlId = "SELECT * FROM aluno WHERE id = :id";
-        $stmt = $pdo->prepare($sqlId);
+        $stmt = $this->pdo->prepare($sqlId);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
 
@@ -55,7 +48,7 @@ class ClassmateRepository {
     
         $sql = "DELETE FROM aluno WHERE id = ?";
     
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(1, $id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -63,11 +56,9 @@ class ClassmateRepository {
     }
 
     public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
-        $database = new Database();
-        $pdo = $database->connectionDatabase();
         $sql = "INSERT INTO aluno (name, type_graduation, age, gender, category) VALUES (:name, :type_graduation, :age, :gender, :category)";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':name', $dto->name);
         $stmt->bindValue(':type_graduation', $dto->typeGraduation);
         $stmt->bindValue(':age', $dto->age);
@@ -75,10 +66,10 @@ class ClassmateRepository {
         $stmt->bindValue(':category', $dto->category);
         $stmt->execute();
 
-        $id = $pdo->lastInsertId();
+        $id = $this->pdo->lastInsertId();
 
         $sqlId = "SELECT * FROM aluno WHERE id = :id";
-        $stmt = $pdo->prepare($sqlId);
+        $stmt = $this->pdo->prepare($sqlId);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
 
@@ -97,11 +88,8 @@ class ClassmateRepository {
 
     public function updated(ClassmateRequestDTO $dto): ClassmateResponseDTO
     {
-        $database = new Database();
-        $pdo = $database->connectionDatabase();
-
         $sqlId = "SELECT * FROM aluno WHERE id = :id";
-        $stmt = $pdo->prepare($sqlId);
+        $stmt = $this->pdo->prepare($sqlId);
         $stmt->bindValue(':id', $dto->id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -113,7 +101,7 @@ class ClassmateRepository {
 
         $sql = "UPDATE aluno SET name = :name, type_graduation = :type_graduation, age = :age, gender = :gender, category = :category WHERE id = :id";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':name', $dto->name, PDO::PARAM_STR);
         $stmt->bindValue(':type_graduation', $dto->typeGraduation, PDO::PARAM_STR);
         $stmt->bindValue(':age', $dto->age, PDO::PARAM_STR);
@@ -123,7 +111,7 @@ class ClassmateRepository {
         $stmt->execute();
 
         $sqlUpdated = "SELECT * FROM aluno WHERE id = :id";
-        $stmt = $pdo->prepare($sqlUpdated);
+        $stmt = $this->pdo->prepare($sqlUpdated);
         $stmt->bindValue(':id', $dto->id, PDO::PARAM_INT);
         $stmt->execute();
 
