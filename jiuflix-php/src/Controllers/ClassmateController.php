@@ -12,16 +12,18 @@ use App\Services\ValidatorsService;
 
 class ClassmateController {
     private $log;
+    private ClassmateRepository $repository;
+    private ClassmateService $service;
 
     public function __construct() {
         $this->log = LoggerFactory::getLogger();
+        $pdo = (new Database())->connectionDatabase();
+        $this->repository = new ClassmateRepository($pdo);
+        $this->service = new ClassmateService($this->repository);
     }
 
     public function getAll() {
-        $pdo = (new Database())->connectionDatabase();
-        $repository = new ClassmateRepository($pdo);
-
-        $classmates = $repository->getAll();
+        $classmates = $this->repository->getAll();
 
         http_response_code(200);
         echo json_encode(['Alunos' => $classmates, 'message' => 'Alunos retornados com sucesso!']);
@@ -31,44 +33,29 @@ class ClassmateController {
     }
 
     public function getByID ($id) {
-        $service = $this->classmateService();
-
-        return $service->getById($id);
+        return $this->service->getById($id);
     }
 
     public function delete ($id) {
-        $service = $this->classmateService();
-
-        return $service->delete($id);
+        return $this->service->delete($id);
     }
 
     public function create (ClassmateRequestDTO $dto): ClassmateResponseDTO {
-        $service = $this->classmateService();
-
         $validator = new ValidatorsService();
         $validator->validateRequiredFields($dto);
         $validator->validateTypegraduation($dto);
 
         $this->log->info('controller.classmate.created', ['message' => 'Classmate created successfuly']);
 
-        return $service->create($dto);
+        return $this->service->create($dto);
     }
 
     public function update(ClassmateRequestDTO $dto): ClassmateResponseDTO
     {
-        $service = $this->classmateService();
-
         $validator = new ValidatorsService();
         $validator->validateRequiredFields($dto);
         $validator->validateTypegraduation($dto);
 
-        return $service->update($dto, $dto->id);
-    }
-
-    private function classmateService(): ClassmateService
-    {
-        $pdo = (new Database())->connectionDatabase();
-
-        return new ClassmateService(new ClassmateRepository($pdo));
+        return $this->service->update($dto, $dto->id);
     }
 }
