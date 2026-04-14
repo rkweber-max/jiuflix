@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\DTO\Response\ClassmateResponseDTO;
 use App\Enums\Strips;
-use App\Repository\AlunoEloquentRepository;
 use App\Repository\AlunoRepository;
 use App\Services\AlunoService;
 use PHPUnit\Framework\TestCase;
