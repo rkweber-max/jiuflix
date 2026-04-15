@@ -68,14 +68,14 @@ class AlunoController extends Controller
         ]);
 
         try {
-            $alunos = Aluno::all()->toArray();
+            $alunos = Aluno::orderBy('id', 'desc')->paginate(10);
 
             Log::info('controller.classmate.get_all.success', [
                 'message' => 'Classmates fetched successfully',
                 'total_count' => count($alunos)
             ]);
 
-            return new JsonResponse(['Alunos' => $alunos, 'message' => 'Alunos retornados com sucesso!'], JsonResponse::HTTP_OK);
+            return new JsonResponse(['Alunos' => $alunos->items()], JsonResponse::HTTP_OK);
         } catch (\Exception $e) {
             Log::error('controller.classmate.get_all.error', [
                 'message' => 'Failed to fetch classmates',
